@@ -1,5 +1,5 @@
 
-# Simple Gene Network Simulation
+# Learn Systems Biology
 
 Please try:
 
