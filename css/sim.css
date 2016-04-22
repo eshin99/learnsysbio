@@ -10,28 +10,28 @@ body {
 }
 
 #header {
-    /* position: absolute; */
+    position: absolute;
     left: 130px;
     top: 0px;
     touch-action: none;
 }
 
 #navigation {
-    /* position: absolute; */
+    position: absolute;
     left: 790px;
     top: 20px;
     touch-action: none;
 }
 
 #editor {
-    /* position: absolute; */
+    position: absolute;
     top: 230px;
     left: 140px;
     width: 750px;
     height: 500px;
 }
 #run {
-    /* position: absolute; */
+    position: absolute;
     top: 128px;
     left: 805px;
     width: 80px;
@@ -39,7 +39,7 @@ body {
 }
 
 #reset {
-    /* position: absolute; */
+    position: absolute;
     top: 178px;
     left: 805px;
     width: 80px;
@@ -47,7 +47,7 @@ body {
 }
 
 #checkbox {
-    /* position: absolute; */
+    position: absolute;
     top: 110px;
     left: 630px;
 }
@@ -58,7 +58,7 @@ body {
 }
 
 #chart {
-    /* position: absolute; */
+    position: absolute;
     top: 190px;
     left: 900px;
     width: 600px;
