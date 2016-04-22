@@ -4,11 +4,8 @@
      * For details, see http://www.apache.org/licenses/LICENSE-2.0.
      */
 
-body {
-    overflow-y: scroll;
-    overflow-x: scroll;
-}
-    /* Toggle Styles */
+
+/* Toggle Styles */
 
 #wrapper {
     padding-left: 0;
@@ -123,4 +120,9 @@ body {
         position: relative;
         margin-right: 0;
     }
+}
+
+body {
+    overflow-y: scroll;
+    overflow-x: scroll;
 }
