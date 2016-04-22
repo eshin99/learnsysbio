@@ -58,7 +58,7 @@ body {
 }
 
 #chart {
-    position: absolute;
+    position: relative;
     top: 190px;
     left: 900px;
     width: 600px;
