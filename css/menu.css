@@ -52,14 +52,14 @@
     position: absolute;
     top: 0;
 
-    width: 120px;
+    width: 110px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
 .sidebar-nav li {
-    text-indent: 10px;
+    text-indent: 5px;
     line-height: 40px;
 }
 
