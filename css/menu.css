@@ -18,10 +18,10 @@
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    left: 250px;
-    width: 200px;
+    left: 100px;
+    width: 100px;
     height: 100%;
-    margin-left: -250px;
+    margin-left: -100px;
 
     background: #000;
     -webkit-transition: all 0.5s ease;
