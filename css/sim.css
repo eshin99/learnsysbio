@@ -7,8 +7,9 @@ body {
     padding: 0;
     background-color:white;
     color: black
-    transform: scale(0.75);
-    transform-origin: 10% 10%;
+    zoom: 0.75;
+    -moz-transform: scale(0.75);
+
 }
 
 #header {
