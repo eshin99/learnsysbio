@@ -20,7 +20,7 @@ body {
 }
 
 #navigation {
-    position: relative;
+    position: absolute;
     left: 790px;
     top: 20px;
     touch-action: none;
