@@ -7,8 +7,6 @@ body {
     padding: 0;
     background-color:white;
     color: black
-    zoom: 0.75;
-    -moz-transform: scale(0.75);
 }
 
 #header {
