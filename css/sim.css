@@ -25,7 +25,7 @@ body {
 
 #editor {
     position: absolute;
-    top: 250px;
+    top: 270px;
     left: 140px;
     width: 750px;
     height: 250px;
@@ -50,18 +50,18 @@ body {
 
 #checkbox {
     position: absolute;
-    top: 110px;
+    top: 130px;
     left: 630px;
 }
 #guide {
     position: absolute;
-    top: 140px;
+    top: 160px;
     left: 140px;
 }
 
 #chart {
     position: absolute;
-    top: 470px;
+    top: 490px;
     left: 140px;
     width: 600px;
     height: 350px;
