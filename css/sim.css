@@ -9,7 +9,6 @@ body {
     color: black
     zoom: 0.75;
     -moz-transform: scale(0.75);
-
 }
 
 #header {
@@ -64,7 +63,7 @@ body {
 
 #chart {
     position: absolute;
-    top: 500px;
+    top: 475px;
     left: 140px;
     width: 600px;
     height: 350px;
