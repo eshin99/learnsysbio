@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!-- Learn Systems Biology by Yong-Jun Shin (csml.uconn.edu), 2016
-     Module 7: Extrinsic (Global) Noise Added to X Protein -->
+     Module 7: Extrinsic (Global) Noise Added to TRH -->
 
     <head>
-        <meta name="description" content="Learn Systems Biology, Introduction to Systems Biology">
-        <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
+      <meta name="description" content="Digital Siganl Processing and Control for Endocrinology">
+      <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
         <!-- Cascading Style Sheet (CSS) for the simulation layout-->
         <link rel="stylesheet" href="css/sim.css">
         <!-- Cascading Style Sheet (CSS) for the sidebar menu-->
@@ -22,7 +22,7 @@
         <!-- pltly.js: the open source JavaScript graphing library https://plot.ly/javascript -->
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <!-- http://www.filosophy.org/post/35/normaldistributed_random_values_in_javascript_using_the_ziggurat_algorithm/ -->
-        <script src="js/random.js"></script>
+        <script src="js/random.js" type="text/javascript"></script>
     </head>
 
     <body>
@@ -61,27 +61,16 @@
                     <li>
                         <a href="module10.html">Module 10</a>
                     </li>
-                    <li>
-                        <a href="module11.html">Module 11</a>
-                    </li>
-                    <li>
-                        <a href="module12.html">Module 12</a>
-                    </li>
-                    <li>
-                        <a href="module13.html">Module 13</a>
-                    </li>
-                    <li>
-                        <a href="module14.html">Module 14</a>
-                    </li>
                 </ul>
             </div>
         </div>
 
         <!-- Title -->
         <div id = "header" class="container">
-            <h3><b>Module 7: Extrinsic (Global) Noise Added to X Protein</b></h3>
-            <h4>Learn Systems Biology <font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
-            <h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>
+            <h3><b>Module 7: Extrinsic (Global) Noise Added to TRH</b></h3>
+            <h4>Digital Siganl Processing and Control for Endocrinology</h4>
+            <h4><font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
+            <!--<h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>-->
         </div>
 
         <!-- Navigation -->
@@ -94,12 +83,12 @@
         <button id ="run" class="w3-btn w3-teal w3-large" onclick="run()">Run</button>
         <button id ="reset" class="w3-btn w3-red w3-large" onclick="history.go(0)">Reset</button>
         <div id = "checkbox">
-            <input id = "xProtein" class="w3-check" type="checkbox" checked="checked" >
-            <label class="w3-medium ">Show x protein</label> <br>
-            <input id = "yProtein" class="w3-check" type="checkbox" checked="checked">
-            <label class="w3-medium">Show y protein</label><br>
-            <input id = "hold" class="w3-check" type="checkbox">
-            <label class="w3-medium">Hold</label>
+          <input id = "rHormone" class="w3-check" type="checkbox" checked="checked" >
+          <label class="w3-medium ">Show TRH (r)</label> <br>
+          <input id = "tHormone" class="w3-check" type="checkbox" checked="checked">
+          <label class="w3-medium">Show TH (t)</label><br>
+          <input id = "hold" class="w3-check" type="checkbox">
+          <label class="w3-medium">Hold</label>
         </div>
         <ol id = "guide">
             <li class = "w3-medium" >Modify the JavaScript code below</li>
@@ -112,25 +101,25 @@
 
         <!-- Code editor with default text -->
         <div id="editor">
-    N = 200;                      // total number of data points
-    x = new Array(N);             // x protein concentration (uM)
-    y = new Array(N);             // y protein concentration (uM)
-    X = 30;                       // constant x protein concentration
-    x[0] = X;                     // initial x protein concentration
-    y[0] = 0;                     // initial y protein concentration
-    pXY = 0.2;                    // production parameter
-    pY = 0.9;                     // degradation/dilution parameter
+N = 200;                      // total number of data points
+r = new Array(N);             // thyrotropin-releasing hormone (TRH) concentration
+t = new Array(N);             // thyroid hormone (TH) concentration
+R = 30;                       // constant thyrotropin-releasing hormone concentration
+r[1] = R;                     // initial thyrotropin-releasing hormone concentration
+t[1] = 0;                     // initial thyroid hormone concentration
+p_rt = 0.2;                   // production/secretion parameter
+p_t = 0.9;                    // degradation/excretion parameter
 
-    for (n = 1; n < N; n++)             // N-1 loops (1 loop = 1 min)
-    {
-        //add extrinsic noise to x protein
-        x[n] = X + 2*random.Gaussian(); // random.Gaussian() generates
-                                        // a normally distributed random
-                                        // number with mean 0 and standard
-                                        // deviation 1 (extrinsic noise)
+for (n = 2; n < N+1; n++)         // N-1 loops
+{
+  //add extrinsic noise to TRH
+  r[n] = R + 2*random.Gaussian(); // random.Gaussian() generates
+                                  // a normally distributed random
+                                  // number with mean 0 and standard
+                                  // deviation 1 (extrinsic noise)
 
-        y[n] = pXY*x[n-1] + pY*y[n-1]; // update y protein concentration
-    }                                  // end of for loop
+  t[n] = p_rt*r[n-1] + p_t*t[n-1]; // update thyroid hormone concentration
+}                                  // end of for loop
         </div>
 
         <!-- Code editor with default text -->
@@ -141,28 +130,26 @@
             editor.setFontSize(12);
             var random = new randomGaussain();
 
-
             // Execute when [Run] is clicked
             $( "#run" ).click(function() {
                 var chart = document.getElementById('chart');
                 var code = editor.getValue();
 
                 eval(code);
-
-                xData = {name: "x protein", x: n, y: x};
-                yData = {name: "y protein", x: n, y: y};
+                rData = {name: "TRH", x: n, y: r};
+                tData = {name: "TH", x: n , y: t};
                 data = [];
-                if (document.getElementById('xProtein').checked) {
-                    data.push (xData);
+                if (document.getElementById('rHormone').checked) {
+                    data.push (rData);
                 }
-                if (document.getElementById('yProtein').checked) {
-                    data.push (yData);
+                if (document.getElementById('tHormone').checked) {
+                    data.push (tData);
                 }
                 layout = {
-                    xaxis: {title: 'time [min]'},
-                    yaxis: {title: 'protein concentration [uM]'},
+                    xaxis: {title: 'n'},
+                    yaxis: {title: 'concentration'},
                     margin: {t: 40},
-                };
+                };;
 
                 if (document.getElementById('hold').checked) {
                     Plotly.plot(chart, data, layout);

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!-- Learn Systems Biology by Yong-Jun Shin (csml.uconn.edu), 2016
-     Module 9: Parameter Estimation using an Adaptive Filter -->
+     Module 9: TH Prediction using an Adaptive Filter -->
 
     <head>
-        <meta name="description" content="Learn Systems Biology, Introduction to Systems Biology">
-        <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
+      <meta name="description" content="Digital Siganl Processing and Control for Endocrinology">
+      <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
         <!-- Cascading Style Sheet (CSS) for the simulation layout-->
         <link rel="stylesheet" href="css/sim.css">
         <!-- Cascading Style Sheet (CSS) for the sidebar menu-->
@@ -61,27 +61,16 @@
                     <li>
                         <a href="module10.html">Module 10</a>
                     </li>
-                    <li>
-                        <a href="module11.html">Module 11</a>
-                    </li>
-                    <li>
-                        <a href="module12.html">Module 12</a>
-                    </li>
-                    <li>
-                        <a href="module13.html">Module 13</a>
-                    </li>
-                    <li>
-                        <a href="module14.html">Module 14</a>
-                    </li>
                 </ul>
             </div>
         </div>
 
         <!-- Title -->
         <div id = "header" class="container">
-            <h3><b> Module 9: Parameter Estimation using an Adaptive Filter</b></h3>
-            <h4>Learn Systems Biology <font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
-            <h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>
+            <h3><b>Module 9: TH Prediction using an Adaptive Filter</b></h3>
+            <h4>Digital Siganl Processing and Control for Endocrinology</h4>
+            <h4><font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
+            <!--<h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>-->
         </div>
 
         <!-- Navigation -->
@@ -94,12 +83,12 @@
         <button id ="run" class="w3-btn w3-teal w3-large" onclick="run()">Run</button>
         <button id ="reset" class="w3-btn w3-red w3-large" onclick="history.go(0)">Reset</button>
         <div id = "checkbox">
-            <input id = "xProtein" class="w3-check" type="checkbox" >
-            <label class="w3-medium ">Show x protein</label> <br>
-            <input id = "yProtein" class="w3-check" type="checkbox" checked="checked">
-            <label class="w3-medium">Show y protein</label><br>
-            <input id = "hold" class="w3-check" type="checkbox">
-            <label class="w3-medium">Hold</label>
+          <input id = "rHormone" class="w3-check" type="checkbox" checked="checked" >
+          <label class="w3-medium ">Show TRH (r)</label> <br>
+          <input id = "tHormone" class="w3-check" type="checkbox" checked="checked">
+          <label class="w3-medium">Show TH (t)</label><br>
+          <input id = "hold" class="w3-check" type="checkbox">
+          <label class="w3-medium">Hold</label>
         </div>
         <ol id = "guide">
             <li class = "w3-medium" >Modify the JavaScript code below</li>
@@ -112,38 +101,39 @@
 
         <!-- Code editor with default text -->
         <div id="editor">
-    N = 200;                  // total number of data points
-    x = new Array(N);         // x protein concentration (uM)
-    y = new Array(N);         // y protein concentration (uM)
-    X = 30;                   // constant x protein concentration
-    x[0] = X;                 // initial x protein concentration
-    y[0] = 0;                 // initial y protein concentration
-    pXY = 0.4;                // production parameter
-    pY = 0.8;                 // degradation/dilution parameter
+N = 200;                      // total number of data points
+r = new Array(N);             // thyrotropin-releasing hormone (TRH) concentration
+t = new Array(N);             // thyroid hormone (TH) concentration
+R = 30;                       // constant thyrotropin-releasing hormone concentration
+r[1] = R;                     // initial thyrotropin-releasing hormone concentration
+t[1] = 0;                     // initial thyroid hormone concentration
+p_rt = 0.4;                   // production/secretion parameter
+p_t = 0.8;                    // degradation/excretion parameter
 
-    // fake data generation
-    for (n = 1; n < N; n++)   // N-1 loops (1 loop = 1 min)
-    {
-        x[n] = X + 2*random.Gaussian();
-        y[n] = pXY*x[n-1] + pY*y[n-1] + 2*random.Gaussian();
-    }
+// simulated data generation
+for (n = 2; n < N+1; n++)   // N-1 loops
+{
+  r[n] = R + 2*random.Gaussian();
+  t[n] = p_rt*r[n-1] + p_t*t[n-1] + 2*random.Gaussian();
 
-    // adaptive parameter estimation (Least Mean Squares (LMS) method)
-    est_pXY = new Array(N);   // estimated production parameter set
-    est_pY = new Array(N);    // estimated degradation/dilution parameter set
-    est_y = new Array(N);     // y protein concentration (uM)
-    error = new Array(N);     // estimation error (y - est_y)
-    est_pXY[1] = 0;           // initial guess for pXY
-    est_pY[1] = 0;            // initial guess for pY
-    u = 0.0001;               // step size
+}
 
-    for (n = 1; n < N-1; n++) // N-2 loops (1 loop = 1 min)
-    {
-        est_pXY[n+1] = est_pXY[n] + u*x[n-1]*(y[n]-(x[n-1]*est_pXY[n] + y[n-1]*est_pY[n]));
-        est_pY[n+1] = est_pY[n] + u*y[n-1]*(y[n]-(x[n-1]*est_pXY[n] + y[n-1]*est_pY[n]));
-        est_y[n+1] = x[n]*est_pXY[n+1] + y[n]*est_pY[n+1];
-        error[n+1] = y[n+1] - est_y[n+1];
-    }
+// adaptive parameter estimation (Least Mean Squares (LMS) method)
+est_p_rt = new Array(N);  // estimated production parameter set
+est_p_t = new Array(N);   // estimated degradation/dilution parameter set
+est_t = new Array(N);     // estimated thyroid hormone concentration
+error = new Array(N);     // estimation error (t - est_t)
+est_p_rt[2] = 0;          // initial guess for p_rt
+est_p_t[2] = 0;           // initial guess for p_t
+u = 0.0001;               // step size
+
+for (n = 2; n < N; n++) // N-2 loops
+{
+  est_p_rt[n+1] = est_p_rt[n] + u*r[n-1]*(t[n]-(r[n-1]*est_p_rt[n] + t[n-1]*est_p_rt[n]));
+  est_p_t[n+1] = est_p_t[n] + u*t[n-1]*(t[n]-(r[n-1]*est_p_rt[n] + t[n-1]*est_p_t[n]));
+  est_t[n+1] = r[n]*est_p_rt[n+1] + t[n]*est_p_t[n+1];
+  error[n+1] = t[n+1] - est_t[n+1];
+}
         </div>
 
         <!-- Code editor with default text -->
@@ -160,24 +150,24 @@
                 var chart = document.getElementById('chart');
                 var code = editor.getValue();
                 eval(code);
-                xData = {name: "x protein", x: n, y: x};
-                yData = {name: "y protein", x: n, y: y};
-                estY = {name: "estimated y protein", x: n, y: est_y};
-                estError = {name: "estimation error", x: n, y: error};
+                rData = {name: "TRH", x: n, y: r};
+                tData = {name: "TH", x: n, y: t};
+                estT = {name: "predicted TH", x: n, y: est_t};
+                estError = {name: "prediction error", x: n, y: error};
                 data = [];
-                if (document.getElementById('xProtein').checked) {
-                    data.push (xData);
+                if (document.getElementById('rHormone').checked) {
+                    data.push (rData);
                 }
-                if (document.getElementById('yProtein').checked) {
-                    data.push (yData);
+                if (document.getElementById('tHormone').checked) {
+                    data.push (tData);
                 }
-                data.push (estY);
+                data.push (estT);
                 data.push (estError);
                 layout = {
-                    xaxis: {title: 'time [min]'},
-                    yaxis: {title: 'protein concentration [uM]'},
+                    xaxis: {title: 'n'},
+                    yaxis: {title: 'concentration'},
                     margin: {t: 40},
-                };
+                };;
 
                 if (document.getElementById('hold').checked) {
                     Plotly.plot(chart, data, layout);

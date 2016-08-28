@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!-- Learn Systems Biology by Yong-Jun Shin (csml.uconn.edu), 2016
-     Module 10: Positive and Negative Autoregulation -->
+     Module 10: Negative Feedback Control -->
 
     <head>
-        <meta name="description" content="Learn Systems Biology, Introduction to Systems Biology">
-        <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
+      <meta name="description" content="Digital Siganl Processing and Control for Endocrinology">
+      <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
         <!-- Cascading Style Sheet (CSS) for the simulation layout-->
         <link rel="stylesheet" href="css/sim.css">
         <!-- Cascading Style Sheet (CSS) for the sidebar menu-->
@@ -59,44 +59,35 @@
                     <li>
                         <a href="module10.html">Module 10</a>
                     </li>
-                    <li>
-                        <a href="module11.html">Module 11</a>
-                    </li>
-                    <li>
-                        <a href="module12.html">Module 12</a>
-                    </li>
-                    <li>
-                        <a href="module13.html">Module 13</a>
-                    </li>
-                    <li>
-                        <a href="module14.html">Module 14</a>
-                    </li>
                 </ul>
             </div>
         </div>
 
         <!-- Title -->
         <div id = "header" class="container">
-            <h3><b>Module 10: Positive and Negative Autoregulation</b></h3>
-            <h4>Learn Systems Biology <font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
-            <h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>
-            <p></p>
+            <h3><b>Module 10: Negative Feedback Control</b></h3>
+            <h4>Digital Siganl Processing and Control for Endocrinology</h4>
+            <h4><font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
+            <!--<h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>-->
         </div>
+
 
         <!-- Navigation -->
         <div id = "navigation" class="container">
             <a href="module9.html"><i class="glyphicon glyphicon-chevron-left w3-xxlarge"></i></a>
-            <a href="module11.html"><i class="glyphicon glyphicon-chevron-right w3-xxlarge"></i></a>
+            <a href="index.html"><i class="glyphicon glyphicon-chevron-right w3-xxlarge"></i></a>
         </div>
 
         <!-- User interface -->
         <button id ="run" class="w3-btn w3-teal w3-large" onclick="run()">Run</button>
         <button id ="reset" class="w3-btn w3-red w3-large" onclick="history.go(0)">Reset</button>
-        <div id = "checkbox">
-            <input id = "xProtein" class="w3-check" type="checkbox" >
-            <label class="w3-medium ">Show x protein</label> <br>
-            <input id = "yProtein" class="w3-check" type="checkbox" checked="checked">
-            <label class="w3-medium">Show y protein</label><br>
+        <div id = "checkbox" style="position: absolute; top: 110px; left: 610px;">
+            <input id = "disturbance" class="w3-check" type="checkbox" checked="checked" >
+            <label class="w3-medium ">Show disturbance</label> <br>
+            <input id = "sHormone" class="w3-check" type="checkbox" checked="checked">
+            <label class="w3-medium">Show TSH</label><br>
+            <input id = "tHormone" class="w3-check" type="checkbox" checked="checked">
+            <label class="w3-medium">Show TH</label><br>
             <input id = "hold" class="w3-check" type="checkbox">
             <label class="w3-medium">Hold</label>
         </div>
@@ -111,34 +102,38 @@
 
         <!-- Code editor with default text -->
         <div id="editor">
-    N = 100;                      // total number of data points
-    x = new Array(N);             // x protein concentration (uM)
-    y = new Array(N);             // y protein concentration (uM)
-    pos_y = new Array(N);         // positively autoregulated
-                                  // y protein concentration (uM)
-    neg_y = new Array(N);         // neagtively autoregulated
-                                  // y protein concentration (uM)
-    X = 10;                       // constant x protein concentration
-    x[0] = X;                     // initial x protein concentration
-    y[0] = 0;                     // initial y protein concentration
-    pXY = 0.2;                    // production parameter
-    pY = 0.9;                     // degradation/dilution parameter
-    par = 0.5;                    // positive autoregulation factor
-    nar = 0.5;                    // negative autoregulation facotr
+N = 200;                      // total number of data points
+r = new Array(N);             // thyrotropin-releasing hormone (TRH) concentration
+t = new Array(N);             // thyroid hormone (TH) concentration
+s = new Array(N);             // thyroid-stimulating hormone (TSH) concentration
+d = new Array(N);             // disturbance (input2)
+R = 10;                       // constant thyrotropin-releasing hormone concentration
+r[1] = R;                     // initial thyrotropin-releasing hormone concentration
+t[1] = 0;                     // initial thyroid hormone concentration
+s[1] = 0;                     // initial thyroid-stimulating hormone concentration
+d[1] = 0;                     // initial disturbance
+p_rs = 0.2;                   // production/secretion parameter p_rs
+p_t = 0.01;                   // degradation/excretion parameter p_t
+p_st = 5;                     // production/secretion parameter p_st
+p_ts = 0.15;                   // negative feedback parameter p_ts
+p_s = 0.9;                    // degradation/excretion parameter p_s
 
-    for (n = 1; n < N; n++)            // N-1 loops (1 loop = 1 min)
-    {
-        x[n] = X;                      // x protein concentration
+for (n = 2; n < N+1; n++)       // N-1 loops
+{
+    r[n] = R;                   // constant TRH
+    s[n] = p_rs*r[n-1] - p_ts*t[n-1] + p_s*s[n-1];  // update TSH concentration
 
-        // update y protein concentration
-        y[n] = pXY*x[n-1] + pY*y[n-1];
+    // update TH concentration
+    if ( n > 100)
+      {
+          d[n] = 5;
 
-        // update positvely autoregulated y protein concentration
-        pos_y[n]= pXY*x[n-1] + (pY + par)*y[n-1];
-
-        // update negatively autoregulated protein concentration
-        neg_y[n]= pXY*x[n-1] + (pY - nar)*y[n-1];
-    }   // end of for loop
+      } else
+      {
+          d[n] = 0;
+      }
+    t[n]= p_st*s[n-1] + p_t*t[n-1] + d[n]; // add disturbance
+}   // end of for loop
         </div>
 
         <!-- Code editor with default text -->
@@ -153,22 +148,22 @@
                 var chart = document.getElementById('chart');
                 var code = editor.getValue();
                 eval(code);
-                xData = {name: "x protein", x: n, y: x};
-                yData = {name: "y protein (no autoregulation)", x: n, y: y};
-                pos_yData = {name: "y protein (par = " + par + ")", x: n, y: pos_y};
-                neg_yData = {name: "y protein (nar = " + nar + ")", x: n, y: neg_y};
+                dData = {name: "disturbance (input2)", x: n, y: d};
+                sData = {name: "TSH", x: n, y: s};
+                tData = {name: "TH", x: n, y: t};
                 data = [];
-                if (document.getElementById('xProtein').checked) {
-                    data.push (xData);
+                if (document.getElementById('disturbance').checked) {
+                    data.push (dData);
                 }
-                if (document.getElementById('yProtein').checked) {
-                    data.push (yData);
-                    data.push (pos_yData);
-                    data.push (neg_yData);
+                if (document.getElementById('sHormone').checked) {
+                    data.push (sData);
+                }
+                if (document.getElementById('tHormone').checked) {
+                    data.push (tData);
                 }
                 layout = {
-                    xaxis: {title: 'time [min]'},
-                    yaxis: {title: 'protein concentration [uM]'},
+                    xaxis: {title: 'n'},
+                    yaxis: {title: 'concentration'},
                     margin: {t: 40},
                 };
 

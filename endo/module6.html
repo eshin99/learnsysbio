@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!-- Learn Systems Biology by Yong-Jun Shin (csml.uconn.edu), 2016
-     Module 6: Y Protein Stability (Simple Gene Network) -->
+     Module 6: Robust Steady-State-->
 
     <head>
-        <meta name="description" content="Learn Systems Biology, Introduction to Systems Biology">
-        <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
+      <meta name="description" content="Digital Siganl Processing and Control for Endocrinology">
+      <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
         <!-- Cascading Style Sheet (CSS) for the simulation layout-->
         <link rel="stylesheet" href="css/sim.css">
         <!-- Cascading Style Sheet (CSS) for the sidebar menu-->
@@ -70,27 +70,16 @@
                     <li>
                         <a href="module10.html">Module 10</a>
                     </li>
-                    <li>
-                        <a href="module11.html">Module 11</a>
-                    </li>
-                    <li>
-                        <a href="module12.html">Module 12</a>
-                    </li>
-                    <li>
-                        <a href="module13.html">Module 13</a>
-                    </li>
-                    <li>
-                        <a href="module14.html">Module 14</a>
-                    </li>
                 </ul>
             </div>
         </div>
 
         <!-- Title -->
         <div id = "header" class="container">
-            <h3><b>Module 6: Y Protein Stability (Simple Gene Network) </b></h3>
-            <h4>Learn Systems Biology <font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
-            <h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>
+          <h3><b>Module 6: Robust Steady-State</b></h3>
+          <h4>Digital Siganl Processing and Control for Endocrinology</h4>
+          <h4><font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
+          <!--<h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>-->
         </div>
 
         <!-- Navigation -->
@@ -105,9 +94,9 @@
         <div id = "checkbox">
             <input id = "disturbance" class="w3-check" type="checkbox" checked="checked" >
             <label class="w3-medium ">Show disturbance</label> <br>
-            <input id = "yProtein" class="w3-check" type="checkbox" checked="checked">
-            <label class="w3-medium">Show y protein</label><br>
-            <input id = "hold" class="w3-check" type="checkbox" ">
+            <input id = "tHormone" class="w3-check" type="checkbox" checked="checked">
+            <label class="w3-medium">Show TH</label><br>
+            <input id = "hold" class="w3-check" type="checkbox">
             <label class="w3-medium">Hold</label>
         </div>
         <ol id = "guide">
@@ -121,26 +110,26 @@
 
         <!-- Code editor with default text -->
         <div id="editor">
-    N = 250;                      // total number of data points
-    x = new Array(N);             // x protein concentration (uM)
-    y = new Array(N);             // y protein concentration (uM)
-    d = new Array(N);             // disturbance affecting y protein
-    X = 10;                       // constant x protein concentration
-    x[0] = X;                     // initial x protein concentration
-    y[0] = 0;                     // initial y protein concentration
-    pXY = 0.5;                    // production parameter
-    pY = 0.9;                     // degradation/dilution parameter
+N = 250;                      // total number of data points
+r = new Array(N);             // thyrotropin-releasing hormone (TRH) concentration
+t = new Array(N);             // thyroid hormone (TH) concentration
+d = new Array(N);             // disturbance affecting thyroid hormone
+R = 10;                       // constant thyrotropin-releasing hormone concentration
+r[1] = R;                     // initial thyrotropin-releasing hormone concentration
+t[1] = 0;                     // initial thyroid hormone concentration
+p_rt = 0.5;                   // production/secretion parameter
+p_t = 0.9;                    // degradation/excretion parameter
 
-    for (n = 1; n < N; n++)             // N-1 loops (1 loop = 1 min)
-    {
-        x[n] = X;                       // constant x protein concentration
+for (n = 2; n < N-1; n++)            // N-1 loops
+{
+  r[n] = R;                        // constant thyrotropin-releasing hormone concentration
 
-        if (n == 50){d[n] = 20;}        // add disturbance 20 to y protein
-        else if (n == 150) {d[n] = -20;} // at time 50 and disturbance -20 to
-        else d[n] = 0;                  // y protein at time 150
+  if (n == 50){d[n] = 20;}         // add disturbance 20 to thyroid hormone
+  else if (n == 150) {d[n] = -20;} // at time 50 and disturbance -20 to
+  else d[n] = 0;                   // thyroid hormone at time 150
 
-        y[n] = pXY*x[n-1] + pY*y[n-1] + d[n]; // update y protein concentration
-    }                                   // end of for loop
+  t[n] = p_rt*r[n-1] + p_t*t[n-1] + d[n];  // update y protein concentration
+}                                   // end of for loop
         </div>
 
         <!-- Code editor with default text -->
@@ -157,19 +146,19 @@
                 eval(code);
 
                 xData = {name: "disturbance", x: n, y: d};
-                yData = {name: "y protein", x: n, y: y};
+                yData = {name: "thyroid hormone", x: n, y: t};
                 data = [];
                 if (document.getElementById('disturbance').checked) {
                     data.push (xData);
                 }
-                if (document.getElementById('yProtein').checked) {
+                if (document.getElementById('tHormone').checked) {
                     data.push (yData);
                 }
                 layout = {
-                    xaxis: {title: 'time [min]'},
-                    yaxis: {title: 'protein concentration [uM]'},
+                    xaxis: {title: 'n'},
+                    yaxis: {title: 'concentration'},
                     margin: {t: 40},
-                };
+                };;
 
                 if (document.getElementById('hold').checked) {
                     Plotly.plot(chart, data, layout);
