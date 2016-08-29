@@ -106,7 +106,7 @@ N = 200;                      // total number of data points
 r = new Array(N);             // thyrotropin-releasing hormone (TRH) concentration
 t = new Array(N);             // thyroid hormone (TH) concentration
 s = new Array(N);             // thyroid-stimulating hormone (TSH) concentration
-d = new Array(N);             // disturbance (input2)
+d = new Array(N);             // disturbance
 R = 10;                       // constant thyrotropin-releasing hormone concentration
 r[1] = R;                     // initial thyrotropin-releasing hormone concentration
 t[1] = 0;                     // initial thyroid hormone concentration
@@ -115,7 +115,7 @@ d[1] = 0;                     // initial disturbance
 p_rs = 0.2;                   // production/secretion parameter p_rs
 p_t = 0.01;                   // degradation/excretion parameter p_t
 p_st = 5;                     // production/secretion parameter p_st
-p_ts = 0.15;                   // negative feedback parameter p_ts
+p_ts = 0.15;                  // negative feedback parameter p_ts
 p_s = 0.9;                    // degradation/excretion parameter p_s
 
 for (n = 2; n < N+1; n++)       // N-1 loops
@@ -123,7 +123,8 @@ for (n = 2; n < N+1; n++)       // N-1 loops
     r[n] = R;                   // constant TRH
     s[n] = p_rs*r[n-1] - p_ts*t[n-1] + p_s*s[n-1];  // update TSH concentration
 
-    // update TH concentration
+
+    // continuous disturbance generation
     if ( n > 100)
       {
           d[n] = 5;
@@ -132,6 +133,7 @@ for (n = 2; n < N+1; n++)       // N-1 loops
       {
           d[n] = 0;
       }
+    // update TH concentration
     t[n]= p_st*s[n-1] + p_t*t[n-1] + d[n]; // add disturbance
 }   // end of for loop
         </div>
@@ -148,7 +150,7 @@ for (n = 2; n < N+1; n++)       // N-1 loops
                 var chart = document.getElementById('chart');
                 var code = editor.getValue();
                 eval(code);
-                dData = {name: "disturbance (input2)", x: n, y: d};
+                dData = {name: "disturbance", x: n, y: d};
                 sData = {name: "TSH", x: n, y: s};
                 tData = {name: "TH", x: n, y: t};
                 data = [];
