@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Learn Systems Biology by Yong-Jun Shin (csml.uconn.edu), 2016
+<!-- Digital Endocrinology by Yong-Jun Shin (csml.uconn.edu), 2016
      Module 10: Negative Feedback Control -->
 
     <head>
@@ -66,8 +66,7 @@
         <!-- Title -->
         <div id = "header" class="container">
             <h3><b>Module 10: Negative Feedback Control</b></h3>
-            <h4>Digital Siganl Processing and Control for Endocrinology</h4>
-            <h4><font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
+            <h4>Digital Endocrinology<font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
             <!--<h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>-->
         </div>
 
@@ -123,7 +122,6 @@ for (n = 2; n < N+1; n++)       // N-1 loops
     r[n] = R;                   // constant TRH
     s[n] = p_rs*r[n-1] - p_ts*t[n-1] + p_s*s[n-1];  // update TSH concentration
 
-
     // continuous disturbance generation
     if ( n > 100)
       {
@@ -133,6 +131,7 @@ for (n = 2; n < N+1; n++)       // N-1 loops
       {
           d[n] = 0;
       }
+      
     // update TH concentration
     t[n]= p_st*s[n-1] + p_t*t[n-1] + d[n]; // add disturbance
 }   // end of for loop

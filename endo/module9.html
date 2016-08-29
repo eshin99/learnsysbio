@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- Learn Systems Biology by Yong-Jun Shin (csml.uconn.edu), 2016
+<!-- Digital Endocrinology by Yong-Jun Shin (csml.uconn.edu), 2016
      Module 9: TH Prediction using an Adaptive Filter -->
 
     <head>
-      <meta name="description" content="Digital Siganl Processing and Control for Endocrinology">
-      <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
+        <meta name="description" content="Digital Siganl Processing and Control for Endocrinology">
+        <meta name="author" content="Yong-Jun Shin (UCONN Computational and Systems Medicine Lab, 2016)">
         <!-- Cascading Style Sheet (CSS) for the simulation layout-->
         <link rel="stylesheet" href="css/sim.css">
         <!-- Cascading Style Sheet (CSS) for the sidebar menu-->
@@ -68,8 +68,7 @@
         <!-- Title -->
         <div id = "header" class="container">
             <h3><b>Module 9: TH Prediction using an Adaptive Filter</b></h3>
-            <h4>Digital Siganl Processing and Control for Endocrinology</h4>
-            <h4><font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
+            <h4>Digital Endocrinology<font color="#a9a9a9"> by UCONN CSMLab </font> <a href="http://csml.uconn.edu"><i class="glyphicon glyphicon-home w3-medium"></i></a></h4>
             <!--<h6>Yong-Jun Shin (2016), Digital Signal Processing and Control for the Study of Gene Networks, Scientific Reports 6:24733 <a href="http://www.nature.com/articles/srep24733" target="_blank">[link]</a></h6>-->
         </div>
 
@@ -115,7 +114,6 @@ for (n = 2; n < N+1; n++)   // N-1 loops
 {
   r[n] = R + 2*random.Gaussian();
   t[n] = p_rt*r[n-1] + p_t*t[n-1] + 2*random.Gaussian();
-
 }
 
 // adaptive parameter estimation (Least Mean Squares (LMS) method)
